@@ -4,7 +4,7 @@ import _ from "lodash";
 import { Editor } from "@monaco-editor/react";
 import { Box } from "@chakra-ui/react";
 import { CODE_SNIPPETS, getUserColor } from "../../Const/contant.js";
-import Output from "./Output";
+import Output from "../Editors/OutPut.jsx";
 import Webeditor from "../Editors/WebEditor";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSocket, userData } from "../../Context/context.jsx";
