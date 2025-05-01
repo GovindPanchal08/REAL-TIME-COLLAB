@@ -20,16 +20,10 @@ const Login = ({ onSuccess }) => {
     try {
       e.preventDefault();
       const { email, password } = formData;
-      const res = await SendData(
-        "/user/login",
-        {
-          email,
-          password,
-        },
-        {
-          credentials: "include",
-        }
-      );
+      const res = await SendData("/user/login", {
+        email,
+        password,
+      });
       // console.log(res);
       if (res.message === "Successfully Login" && res.data.token) {
         toast.success(res.message);
@@ -42,7 +36,7 @@ const Login = ({ onSuccess }) => {
         toast.warning("invalid credentials");
       } else {
         toast.error(res.message);
-        navigate("/register");
+        navigate("/ragister");
       }
     } catch (error) {
       console.log(error.message);
