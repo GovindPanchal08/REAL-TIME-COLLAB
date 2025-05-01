@@ -66,10 +66,8 @@ const RoomEntry = ({ token }) => {
             navigate("/login");
           }
         } catch (error) {
-          console.error("Failed to validate token:", error.message);
+          console.error("Failed to validate token:");
         }
-      } else {
-        console.warn("No token found");
       }
     };
 
