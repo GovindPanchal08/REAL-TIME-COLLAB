@@ -1,5 +1,44 @@
 {
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
   "dependencies": {
-    "git-filter-repo": "^0.0.30"
+    "@huggingface/inference": "^2.8.1",
+    "@huggingface/transformers": "^3.2.4",
+    "@tensorflow/tfjs": "^4.21.0",
+    "axios": "^1.7.9",
+    "bcrypt": "^5.1.1",
+    "compromise": "^14.14.0",
+    "config": "^3.3.12",
+    "cookie": "^0.6.0",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-session": "^1.18.1",
+    "express-validator": "^7.2.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongodb": "^6.8.0",
+    "mongoose": "^8.5.3",
+    "multer": "^1.4.5-lts.1",
+    "natural": "^1.0.1",
+    "node-fetch": "^3.3.2",
+    "openai": "^4.78.1",
+    "passport": "^0.7.0",
+    "passport-github2": "^0.1.12",
+    "puppeteer": "^23.2.1",
+    "react-toastify": "^11.0.5",
+    "socket.io": "^4.8.0",
+    "tesseract.js": "^5.1.1",
+    "transformers": "^3.1.0",
+    "validator": "^13.12.0"
   }
 }
