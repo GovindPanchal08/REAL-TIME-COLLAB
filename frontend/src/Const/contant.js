@@ -26,27 +26,27 @@ export const CODE_SNIPPETS = {
 };
 export const features = [
   {
-    img: "/src/assets/image4.png",
+    img: "/image1.png",
     title: "Chat",
     desc: "Real-time messaging for seamless collaboration.",
   },
   {
-    img: "/src/assets/image5.png",
+    img: "/image5.png",
     title: "Chatbot",
     desc: "AI-powered chatbot for instant assistance.",
   },
   {
-    img: "/src/assets/image2.png",
+    img: "/image2.png",
     title: "Group Video Call",
     desc: "Collaborate face-to-face with team members.",
   },
   {
-    img: "/src/assets/image1.png",
+    img: "/image1.png",
     title: "Multiple Programming Languages",
     desc: "Code in various programming languages.",
   },
   {
-    img: "/src/assets/image3.png",
+    img: "/image3.png",
     title: "Code & Web Editor",
     desc: "Live code and web development environment.",
   },
