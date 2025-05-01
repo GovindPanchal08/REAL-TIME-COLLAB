@@ -1,8 +1,6 @@
 import axios from "axios";
 import { LANGUAGE_VERSIONS } from "./contant.js";
 const baseurl = import.meta.env.VITE_BACKEND_URL;
-
-console.log(baseurl)
 export const fetchData = async (endpoint, options = {}) => {
   const url = `${baseurl}${endpoint}`;
   const response = await fetch(url, {
