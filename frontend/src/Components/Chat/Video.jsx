@@ -1,27 +1,29 @@
 import React, { useEffect, useRef, useState } from "react";
 import { ZegoUIKitPrebuilt } from "@zegocloud/zego-uikit-prebuilt";
+import { userData } from "../../Context/context";
 
 const VideoCall = () => {
   const [isInCall, setIsInCall] = useState(false);
+  const { userName } = userData();
   const containerRef = useRef(null);
   const zpRef = useRef(null);
   const startCall = () => {
     setIsInCall(true);
   };
   useEffect(() => {
-    const appID = 1200491289;
-    const serverSecret = "1153c786a3deb2aa6e14b692bbb71c1a";
+    const appID = import.meta.env.VITE_APP_ID;
+    const serverSecret = import.meta.env.VITE_SERVER_KEY;
     const userID = localStorage.getItem("userId") || String(Date.now());
     const roomId = localStorage.getItem("roomId") || "defaultRoom";
-    const userName = "govind";
+    const username = userName;
 
     if (isInCall && containerRef.current) {
       const kitToken = ZegoUIKitPrebuilt.generateKitTokenForTest(
-        appID,
+        JSON.parse(appID),
         serverSecret,
         roomId,
         userID,
-        userName
+        username
       );
       zpRef.current = ZegoUIKitPrebuilt.create(kitToken);
       zpRef.current.joinRoom({
@@ -64,7 +66,7 @@ const VideoCall = () => {
     return () => {
       zpRef.current?.destroy();
     };
-  }, [isInCall]);
+  }, [isInCall, userName]);
   return (
     <div className="w-full flex justify-center items-center p-4">
       {!isInCall ? (

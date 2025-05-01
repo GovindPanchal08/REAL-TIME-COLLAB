@@ -1,6 +1,8 @@
 import axios from "axios";
 import { LANGUAGE_VERSIONS } from "./contant.js";
-const baseurl = "http://localhost:8000";
+const baseurl = import.meta.env.VITE_BACKEND_URL;
+
+console.log(baseurl)
 export const fetchData = async (endpoint, options = {}) => {
   const url = `${baseurl}${endpoint}`;
   const response = await fetch(url, {
@@ -68,7 +70,6 @@ const API = axios.create({
 //   console.log(response.data);
 // };
 // getAvailableLanguages();
-
 
 export const executeCode = async (language, sourcecode) => {
   const response = await API.post("/execute", {

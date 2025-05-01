@@ -149,7 +149,7 @@ const handleSocket = (io) => {
         const newMsg = {
           sender: userId,
           content: message,
-          senderName: user.fullname || user.username,
+          senderName: user?.fullname || user?.username,
           timestamp: new Date(),
         };
 

@@ -9,16 +9,16 @@ const { exec } = require("child_process");
 const fs = require("fs");
 const app = express();
 const server = http.createServer(app);
+require("dotenv").config();
 const io = new Server(server, {
   cors: {
-    origin: "*", // Allow your frontend's origin
+    origin: process.env.FRONTEND_URL, // Allow your frontend's origin
     methods: ["GET", "POST"], // Allowable methods
     credentials: true, // Allow credentials (cookies, etc.)
   },
 });
 
 app.use(cookieParser());
-require("dotenv").config();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
@@ -34,7 +34,7 @@ const airoute = require("./routes/airoute");
 //corss setup
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: process.env.FRONTEND_URL,
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
