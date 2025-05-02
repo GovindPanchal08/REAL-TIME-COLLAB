@@ -11,7 +11,6 @@ const MainLayout = lazy(() => import("./Components/MainLayout.jsx"));
 const Login = lazy(() => import("./Components/Auth/Login/Login.jsx"));
 const Ragister = lazy(() => import("./Components/Auth/Ragister/Ragister.jsx"));
 import Toast from "./Components/Toast/Toast.jsx";
-
 export function App() {
   const [token, setToken] = useState(null);
 
@@ -21,12 +20,11 @@ export function App() {
       setToken(storedToken);
     }
   }, []);
-
   const handleLoginSuccess = (tok) => {
     localStorage.setItem("token", tok); // Store token
     setToken(tok);
   };
-
+  
   return (
     <>
       <Router>
@@ -63,7 +61,7 @@ export function App() {
           </Routes>
         </Suspense>
       </Router>
-      <Toast />
+      <Toast  />
     </>
   );
 }
