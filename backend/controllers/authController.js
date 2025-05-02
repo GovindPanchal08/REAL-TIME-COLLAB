@@ -20,12 +20,7 @@ module.exports.ragisterUser = async function (req, res) {
             username,
           });
           let token = generateToken(user);
-          res.cookie("token", token, {
-            httpOnly: true, // Prevent client-side access
-            secure: true, // Secure in production
-            sameSite: "none", // Prevent CSRF attacks
-            expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-          });
+          res.cookie("token", token);
           res.json({ message: "user created succesfully" });
         }
       });
@@ -44,12 +39,7 @@ module.exports.loginUser = async function (req, res) {
     bcrypt.compare(password, user.password, function (err, result) {
       if (result) {
         let token = generateToken(user);
-        res.cookie("token", token, {
-          httpOnly: true, // Prevent client-side access
-          secure: true, // Secure in production
-          sameSite: "none", // Prevent CSRF attacks
-          expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-        });
+        res.cookie("token", token);
 
         res.status(200).json({
           message: "Successfully Login",
