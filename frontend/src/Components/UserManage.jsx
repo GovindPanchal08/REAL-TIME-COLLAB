@@ -17,6 +17,7 @@ const UserManage = () => {
 
   const [selectedFile, setSelectedFile] = useState(null);
   const handleLogout = () => {
+    localStorage.removeItem("token");
     deleteCookie("token");
     window.location.href = "/";
   };

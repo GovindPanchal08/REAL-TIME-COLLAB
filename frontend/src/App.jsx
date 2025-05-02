@@ -1,4 +1,4 @@
-import { useState, Suspense, lazy } from "react";
+import { useState, useEffect, Suspense, lazy } from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -7,27 +7,42 @@ import {
 } from "react-router-dom";
 import RoomEntry from "./Components/Room.jsx";
 import UserManage from "./Components/UserManage.jsx";
-import { getCookie } from "./Const/contant.js";
 const MainLayout = lazy(() => import("./Components/MainLayout.jsx"));
 const Login = lazy(() => import("./Components/Auth/Login/Login.jsx"));
 const Ragister = lazy(() => import("./Components/Auth/Ragister/Ragister.jsx"));
 import Toast from "./Components/Toast/Toast.jsx";
+
 export function App() {
-  const [token, setToken] = useState(getCookie("token"));
+  const [token, setToken] = useState(null);
+
+  useEffect(() => {
+    const storedToken = localStorage.getItem("token");
+    if (storedToken) {
+      setToken(storedToken);
+    }
+  }, []);
+
   const handleLoginSuccess = (tok) => {
+    localStorage.setItem("token", tok); // Store token
     setToken(tok);
   };
+
   return (
     <>
       <Router>
-        <Suspense fallback={<div></div>}>
+        <Suspense fallback={<div>Loading...</div>}>
           <Routes>
-            {/* If the token is not present, redirect to login */}
+            {/* Protected Routes */}
             <Route
               path="/room/:roomid"
               element={token ? <MainLayout /> : <Navigate to="/login" />}
             />
-            {/* Unauthenticated routes */}
+            <Route
+              path="/user"
+              element={token ? <UserManage /> : <Navigate to="/login" />}
+            />
+
+            {/* Public Routes */}
             <Route
               path="/ragister"
               element={!token ? <Ragister /> : <Navigate to="/" />}
@@ -42,10 +57,8 @@ export function App() {
                 )
               }
             />
-            <Route
-              path="/user"
-              element={token ? <UserManage /> : <Navigate to="/login" />}
-            />
+
+            {/* Default Route */}
             <Route path="/" element={<RoomEntry token={token} />} />
           </Routes>
         </Suspense>

@@ -28,6 +28,7 @@ const Login = ({ onSuccess }) => {
       if (res.message === "Successfully Login" && res.data.token) {
         toast.success(res.message);
         window.localStorage.setItem("userId", res.data.user);
+        localStorage.setItem("token", res.data.token);
         onSuccess(res.data.token);
         navigate("/");
       } else if (res.error === "email or password incorrect") {

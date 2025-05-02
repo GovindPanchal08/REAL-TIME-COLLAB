@@ -1,0 +1,8 @@
+// {
+//   "rewrites": [
+//     {
+//       "source": "/api/:match*",
+//       "destination": "https://real-time-collab.onrender.com/api/:match*"
+//     }
+//   ]
+// }
