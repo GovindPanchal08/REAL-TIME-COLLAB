@@ -29,7 +29,7 @@ const Setting = () => {
       code,
     });
     if (res.message) toast.success("File saved and opened in VS Code");
-    // console.log(res);
+    // console.log(res.message);
   };
   return (
     <>

@@ -110,7 +110,7 @@ const ResizableSplit = ({ leftContent, rightContent, showCursors }) => {
       document.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseup", handleMouseUp);
     };
-  }, [isResizing]);
+  }, [isResizing, handleMouseMove, handleMouseUp, leftRef, rightRef]);
 
   //cursorMovement
   useEffect(() => {
@@ -129,15 +129,15 @@ const ResizableSplit = ({ leftContent, rightContent, showCursors }) => {
   return (
     <div
       ref={containerRef}
-      className={`resizable-container flex ${
+      className={`resizable-container flex  ${
         !isOpen ? "w-[100vw]" : "w-[calc(95vw-18rem)]"
       } h-[99vh]  transition-transform ease-in duration-75 relative`}
     >
-      <div className="absolute flex  gap-3 h-full w-full">
+      <div className="md:absolute md:flex space-y-1 md:space-y-0   gap-3 h-full w-full">
         <div
           ref={leftRef}
-          className={`left h-full w-full `}
-          style={{ width: "70%" }}
+          className={`left mt-1 md:mt-0 h-[60%] md:h-full md:w-[70%] `}
+          // style={{ width: "70%" }}
         >
           {leftContent}
         </div>
@@ -145,7 +145,7 @@ const ResizableSplit = ({ leftContent, rightContent, showCursors }) => {
         <div
           ref={resizerRef}
           onMouseDown={handleMouseDown}
-          className="resizer bg-[#ccc]  hover:bg-blue-500  hover:transition-all hover:ease-in-out hover:duration-300 rounded-sm"
+          className="resizer hidden md:block bg-[#ccc]  hover:bg-blue-500  hover:transition-all hover:ease-in-out hover:duration-300 rounded-sm"
           style={{
             width: "5px",
             cursor: "col-resize",
@@ -160,7 +160,7 @@ const ResizableSplit = ({ leftContent, rightContent, showCursors }) => {
         ></div>
 
         {/* Right Content */}
-        <div ref={rightRef} className="h-full w-full " style={{ width: "30%" }}>
+        <div ref={rightRef} className="h-[50%] md:h-full md:w-[30%] " >
           {rightContent}
         </div>
       </div>

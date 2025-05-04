@@ -90,7 +90,7 @@ const Client = () => {
 
       <div className="grid grid-cols-2 gap-2">{renderParticipants}</div>
 
-      <div className="absolute bottom-1 mx-4 my-4 flex gap-[4rem]">
+      <div className="md:absolute bottom-1 mx-10 md:mx-4 my-4 flex gap-[4rem]">
         <button onClick={handleCopy} className="w-7 h-7">
           <img src={copyIcon} alt="Copy" loading="lazy" />
         </button>

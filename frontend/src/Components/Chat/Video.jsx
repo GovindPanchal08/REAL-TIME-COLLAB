@@ -50,6 +50,7 @@ const VideoCall = () => {
         console.log(videoWrappers);
         videoWrappers.forEach((el) => {
           el.style.maxWidth = "400px";
+          el.style.width = "50%";
           el.style.borderRadius = "1rem";
           el.style.overflow = "hidden";
         });
@@ -58,7 +59,7 @@ const VideoCall = () => {
         if (video) {
           video.style.borderRadius = "1rem";
           video.style.objectFit = "cover";
-          video.style.width = "80%";
+          video.style.width = "50%";
           video.style.height = "auto";
         }
       }, 100); // Wait for DOM render
@@ -68,7 +69,7 @@ const VideoCall = () => {
     };
   }, [isInCall, userName]);
   return (
-    <div className="w-full flex justify-center items-center p-4">
+    <div className="w-full flex justify-center items-center p-2">
       {!isInCall ? (
         <button
           onClick={startCall}

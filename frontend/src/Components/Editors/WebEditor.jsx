@@ -51,7 +51,7 @@ const Webeditor = () => {
   const { showCursors } = useSettings();
   const [fileName, setFileName] = useState("index.html");
   const { roomid } = useParams();
-  console.log(roomid)
+  console.log(roomid);
   const [fileContent, setFileContent] = useState(files[fileName].value);
   const [iframeContent, setIframeContent] = useState("");
   const previewTabRef = useRef(null);
@@ -105,12 +105,11 @@ const Webeditor = () => {
   };
   return (
     <Suspense fallback={<div></div>}>
-      <div>
+      <div className="z-0">
         {/* Resizer */}
         <ResizableSplit
-         roomid={roomid}
           leftContent={
-            <div className="w-full h-full rounded-[.8rem] overflow-hidden border border-gray-700">
+            <div className="w-full  h-full rounded-[.8rem] overflow-hidden border border-gray-700">
               <div className="flex bg-gray-800 text-white text-sm border-b  border-gray-700">
                 {Object.keys(files).map((file) => (
                   <button
@@ -150,7 +149,8 @@ const Webeditor = () => {
               />
             </div>
           }
-          showCursors={showCursors} 
+          roomid={roomid}
+          showCursors={showCursors}
         />
       </div>
     </Suspense>

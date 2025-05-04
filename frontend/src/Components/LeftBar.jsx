@@ -63,17 +63,17 @@ const LeftBar = () => {
   };
   // bg-[#2c2f3f]
   return (
-    <div className="font-sans flex w-fit h-full ">
+    <div className="font-sans flex flex-col md:flex-row  md:w-fit h-full   ">
       {/* Sidebar */}
       <Suspense fallback={<div>...</div>}>
         <div
-          className={`flex flex-col ${
+          className={`flex   ${
             !activeTab && "rounded-[.8rem]"
-          }  text-[#f5f5f5]  bg-[#2c2f3f]  border border-gray-700  transition-all duration-300 h-full shadow-lg`}
+          }  flex-col md:flex-col w-full md:w-fit  md:h-full text-[#f5f5f5]  bg-[#2c2f3f]  md:border border-gray-700  transition-all duration-300 h-full shadow-lg`}
         >
           {/* User Profile Section */}
 
-          <div className="w-full flex items-center justify-center mb-4 p-2 border-b border-gray-600">
+          <div className=" hidden  md:w-full md:flex items-center md:justify-center md:mb-4 p-2 border-b border-gray-600">
             <div
               onClick={handleUser}
               className="w-12 h-12 cursor-pointer rounded-full overflow-hidden border-2 border-gray-500"
@@ -87,11 +87,11 @@ const LeftBar = () => {
             </div>
           </div>
           {/* Navigation Tabs */}
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-row md:flex-col  justify-around items-center gap-2 md:gap-4 p-2  ">
             {tabs.map((tab) => (
               <div
                 key={tab.id}
-                className={` relative flex items-center justify-center p-3 rounded-md cursor-pointer hover:bg-[#3a3f58] transition-all  duration-300 ${
+                className={` relative flex   items-center justify-center md:p-3  p-2 rounded-md cursor-pointer hover:bg-[#3a3f58] transition-all  duration-300 ${
                   activeTab === tab.id ? "bg-[#555a75]" : ""
                 }`}
                 onClick={() => {
@@ -101,7 +101,7 @@ const LeftBar = () => {
               >
                 <div className="relative group">
                   <img
-                    className="w-8 h-8 group-hover:opacity-100"
+                    className="md:w-8 md:h-8  w-6 h-6 group-hover:opacity-100"
                     src={tab.icon}
                     alt={tab.id}
                     loading="lazy"
@@ -113,19 +113,29 @@ const LeftBar = () => {
               </div>
             ))}
             <div
-              className={`flex items-center justify-center p-3 rounded-md cursor-pointer hover:bg-[#3a3f58] transition-all duration-300 `}
+              className={`flex items-center justify-center md:p-3 p-2 rounded-md cursor-pointer hover:bg-[#3a3f58] transition-all duration-300 `}
               onClick={() => handleIsWeb(!isWeb)}
             >
               <div className="relative group">
-                <img className="w-8 h-8" src={code} alt="code" loading="lazy" />
+                <img
+                  className="md:w-8 md:h-8  w-6 h-6"
+                  src={code}
+                  alt="code"
+                  loading="lazy"
+                />
               </div>
             </div>
             <div
-              className={`flex items-center justify-center p-3 rounded-md cursor-pointer hover:bg-[#3a3f58] transition-all duration-300 `}
+              className={`flex items-center justify-center md:p-3 p-2 rounded-md cursor-pointer hover:bg-[#3a3f58] transition-all duration-300 `}
               onClick={() => handleGenerateCode(!generateCode)}
             >
               <div className="relative group">
-                <img className="w-10 h-10" src={prompt} alt="" loading="lazy" />
+                <img
+                  className="md:w-10 md:h-10  w-7 h-7"
+                  src={prompt}
+                  alt=""
+                  loading="lazy"
+                />
                 <span className="absolute  whitespace-nowrap break-keep left-8 text-base  top-0 z-10 transform -translate-y-[2rem] bg-gray-800 text-white rounded-md px-2 py-1 opacity-0 group-hover:opacity-100 transition-all duration-75 pointer-events-none">
                   Generate Code
                 </span>
@@ -136,19 +146,21 @@ const LeftBar = () => {
         {/* Right Side Panels */}
         <div
           className={`${
-            activeTab ? "p-2 w-[18rem]" : ""
-          } bg-[#2c2f3f] text-white  ease-in transition-all duration-500`}
+            activeTab ? "p-2 w-full md:w-[18rem]" : ""
+          } bg-[#2c2f3f] text-white ease-in transition-all duration-500`}
         >
           {tabs.map((tab) => (
             <div
               key={tab.id}
               className={`ease-in transition-all duration-500 ${
                 activeTab === tab.id
-                  ? "block opacity-100 visible "
-                  : "hidden opacity-0 invisible "
+                  ? "block opacity-100 visible"
+                  : "hidden opacity-0 invisible"
               }`}
             >
-              {tab.component}
+              <div className="max-h-[60vh] md:max-h-[100vh] md:pr-0 md:overflow-y-hidden overflow-y-auto pr-2">
+                {tab.component}
+              </div>
             </div>
           ))}
         </div>

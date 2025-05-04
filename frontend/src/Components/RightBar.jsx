@@ -24,11 +24,11 @@ const RightBar = () => {
 
         {/* Video Call Panel */}
         <div
-          className={`absolute   w-[40vw] h-full top-0 right-0  bg-[#1e1e2f] transform transition-transform duration-500 ease-in-out ${
+          className={`absolute w-full  md:w-[40vw] h-full top-0 right-0  bg-[#1e1e2f] transform transition-transform duration-500 ease-in-out ${
             isOpen ? "translate-x-0" : "translate-x-full"
           }`}
         >
-          <div className="flex p-4 items-center">
+          <div className="flex p-4 items-center gap-2">
             <h2 className="text-2xl font-semibold text-white">
               Group Video Call
             </h2>

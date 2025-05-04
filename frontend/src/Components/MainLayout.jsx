@@ -6,9 +6,9 @@ const RightBar = lazy(() => import("./RightBar"));
 const MainLayout = () => {
   return (
     <Suspense fallback={<div></div>}>
-      <div className="relative flex  p-1 w-screen h-screen overflow-hidden bg-slate-900 ">
+      <div className="relative flex md:flex-row  flex-col  p-1 w-screen h-screen md:overflow-hidden overflow-y-auto overflow-x-hidden  bg-slate-900 ">
         <LeftBar />
-        <div className="w-[100vw]  h-[100vh] pl-1 ">
+        <div className="w-[100vw] h-[100vh] md:pl-1 ">
           <CodeEditor />
           <RightBar />
         </div>
