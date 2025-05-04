@@ -2,59 +2,65 @@ const userModel = require("../models/user-model");
 const bcrypt = require("bcrypt");
 const generateToken = require("../utils/generateToken");
 
-module.exports.ragisterUser = async function (req, res) {
+module.exports.registerUser = async function (req, res) {
   try {
-    let { email, password, username } = req.body;
-    let users = await userModel.findOne({ email: email });
-    if (users) {
-      return res.json({ error: "already have an account" });
+    const { email, password, username } = req.body;
+
+    const existingUser = await userModel.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ error: "Account already exists" });
     }
-    bcrypt.genSalt(10, function (err, salt) {
-      if (err) return console.log(err);
-      bcrypt.hash(password, salt, async function (err, hash) {
-        if (err) return res.send(err);
-        else {
-          let user = await userModel.create({
-            email,
-            password: hash,
-            username,
-          });
-          let token = generateToken(user);
-          res.cookie("token", token, {
-            httpOnly: true,
-            secure: true, // required for HTTPS
-            sameSite: "None", // required for cross-site cookies
-            maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-          });
-          res.json({ message: "user created succesfully" });
-        }
-      });
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    const user = await userModel.create({
+      email,
+      password: hashedPassword,
+      username,
     });
-  } catch (error) {
-    console.log(error.message);
+
+    const token = generateToken(user);
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "None",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+
+    res.status(201).json({ message: "User created successfully" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Server error" });
   }
 };
+
 module.exports.loginUser = async function (req, res) {
   try {
-    let { email, password } = req.body;
-    let user = await userModel.findOne({ email: email });
+    const { email, password } = req.body;
+
+    const user = await userModel.findOne({ email });
     if (!user) {
-      return res.json({ error: "email or password incorrect" });
+      return res.status(401).json({ error: "Invalid credentials" });
     }
-    bcrypt.compare(password, user.password, function (err, result) {
-      if (result) {
-        let token = generateToken(user);
-        res.cookie("token", token);
-        res.status(200).json({
-          message: "Successfully Login",
-          data: { user: user.id, token },
-        });
-      } else {
-        res.json({ error: "password did not match" });
-      }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(401).json({ error: "Invalid credentials" });
+    }
+
+    const token = generateToken(user);
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "None",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
     });
-  } catch (error) {
-    console.log(error);
+
+    res.status(200).json({ message: "Login successful", data: { user: user._id } });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Server error" });
   }
 };
 
