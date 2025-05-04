@@ -59,7 +59,6 @@ const VideoCall = () => {
         if (video) {
           video.style.borderRadius = "1rem";
           video.style.objectFit = "cover";
-          video.style.width = "50%";
           video.style.height = "auto";
         }
       }, 100); // Wait for DOM render

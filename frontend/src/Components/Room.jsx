@@ -78,7 +78,7 @@ const RoomEntry = ({ token }) => {
     };
 
     initializeData();
-  }, []);
+  }, [roomid, navigate]);
 
   return (
     <>
@@ -86,9 +86,9 @@ const RoomEntry = ({ token }) => {
         For Better Experience Use Laptop
       </p>
       <div className="min-h-screen bg-gradient-to-b from-gray-100 to-gray-200 text-gray-900 flex flex-col items-center p-6">
-        <nav className="w-full flex justify-between items-center px-4 md:px-16 py-2 shadow-md shadow-blue-100 rounded-lg">
+        <nav className="w-full flex justify-between items-center px-4 md:px-16 py-2  rounded-lg">
           <div>
-            <h1 className="text-[2rem] md:text-[2.5rem] font-medium tracking-tighter">
+            <h1 className="text-[2rem] shadow-md shadow-blue-200 rounded-md md:text-[2.5rem] font-medium tracking-tighter">
               Code<span className="text-blue-500">ify</span>
             </h1>
           </div>
@@ -187,7 +187,7 @@ const RoomEntry = ({ token }) => {
           </div>
         </main>
 
-        <div className="w-full overflow-hidden whitespace-nowrap shadow-sm py-3 mt-20 border-t border-b border-gray-300  rounded-lg">
+        <div className="w-full overflow-hidden whitespace-nowrap shadow-sm py-3 mt-20   rounded-lg">
           <div className="flex space-x-8 w-max animate-marquee">
             {features.concat(features).map((feature, index) => (
               <div

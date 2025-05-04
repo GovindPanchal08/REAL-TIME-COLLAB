@@ -20,7 +20,12 @@ module.exports.ragisterUser = async function (req, res) {
             username,
           });
           let token = generateToken(user);
-          res.cookie("token", token);
+          res.cookie("token", token, {
+            httpOnly: true,
+            secure: true, // required for HTTPS
+            sameSite: "None", // required for cross-site cookies
+            maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+          });
           res.json({ message: "user created succesfully" });
         }
       });
@@ -40,7 +45,6 @@ module.exports.loginUser = async function (req, res) {
       if (result) {
         let token = generateToken(user);
         res.cookie("token", token);
-
         res.status(200).json({
           message: "Successfully Login",
           data: { user: user.id, token },
@@ -55,8 +59,9 @@ module.exports.loginUser = async function (req, res) {
 };
 
 module.exports.profile = async function (req, res) {
+  console.log(req.user);
   try {
-    let { username, email, password, newpassword } = req.body;
+    let { username, email } = req.body;
     let pic = req.file ? req.file.buffer : undefined;
     console.log(req.file);
     // Ensure the user is authenticated
@@ -72,19 +77,6 @@ module.exports.profile = async function (req, res) {
     if (username) updatedData.username = username;
     if (email) updatedData.email = email || req.user.email;
     if (pic) updatedData.pic = pic;
-
-    // Handle password change
-    if (password && newpassword) {
-      let isMatch = await bcrypt.compare(password, req.user.password);
-      console.log("Password match:", isMatch);
-
-      if (!isMatch) {
-        return res
-          .status(400)
-          .json({ message: "Current password is incorrect." });
-      }
-      updatedData.password = await bcrypt.hash(newpassword, 10);
-    }
 
     // Update user in the database
     let user = await userModel.findOneAndUpdate({ _id: id }, updatedData, {

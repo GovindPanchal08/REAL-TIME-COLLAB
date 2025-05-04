@@ -123,6 +123,9 @@ const LeftBar = () => {
                   alt="code"
                   loading="lazy"
                 />
+                 <span className="absolute  whitespace-nowrap break-keep left-8 text-base  top-0 z-10 transform -translate-y-[2rem] bg-gray-800 text-white rounded-md px-2 py-1 opacity-0 group-hover:opacity-100 transition-all duration-75 pointer-events-none">
+                  {!isWeb ? "Web" : "Code"}
+                </span>
               </div>
             </div>
             <div

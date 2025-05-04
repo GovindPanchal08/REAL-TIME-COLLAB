@@ -18,7 +18,9 @@ router.get("/", function (req, res) {
 router.post("/ragister", ragisterUser);
 router.post("/login", loginUser);
 router.get("/logout", logout);
+
 router.post("/profile", upload.single("photo"), isLoggedin, profile);
+
 router.get("/validate", isLoggedin, async (req, res) => {
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];

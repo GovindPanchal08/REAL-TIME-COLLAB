@@ -3,15 +3,16 @@ import { SendData } from "../Const/api.js";
 import { useNavigate } from "react-router-dom";
 import { userData } from "../Context/context.jsx";
 import { deleteCookie, getCookie } from "../Const/contant.js";
+import { toast } from "react-toastify";
 
 const UserManage = () => {
   const navigate = useNavigate();
+  const roomid = localStorage.getItem("roomId");
+  
   const { userName, email, pic } = userData();
   const [user, setUser] = useState({
     email: email,
     username: userName,
-    password: "",
-    newpassword: "",
     profilePhoto: !pic ? "src/assets/public/images/profile.png" : pic, // Default profile photo
   });
 
@@ -53,14 +54,17 @@ const UserManage = () => {
       const formData = new FormData();
       formData.append("username", user.username);
       formData.append("email", user.email);
-      formData.append("password", user.password);
-      formData.append("newpassword", user.newpassword);
       if (selectedFile) {
         formData.append("photo", selectedFile);
         console.log(selectedFile);
       }
 
       const res = await SendData("/user/profile", formData);
+      if (res.message === "Profile updated successfully.") {
+        toast.success("Profile updated successfully.");
+      } else {
+        toast.error("Profile update failed.");
+      }
       console.log(res);
     } catch (error) {
       console.log(error.message);
@@ -77,7 +81,7 @@ const UserManage = () => {
         {/* Back Button */}
         <div className="absolute top-4 left-4">
           <button
-            onClick={() => navigate(`/`)}
+            onClick={() => navigate(`/room/${roomid}`)}
             className="flex items-center text-gray-300 hover:text-white transition duration-200"
           >
             <svg
@@ -104,7 +108,7 @@ const UserManage = () => {
               src={
                 user.profilePhoto
                   ? `data:image/jpeg;base64,${user.profilePhoto}`
-                  : "src/assets/public/images/profile.png"
+                  : "/src/assets/public/images/profile.png"
               }
               alt="Profile"
               className="w-32 h-32 rounded-[3rem] object-cover object-top  border-4 border-gray-500 shadow-lg"

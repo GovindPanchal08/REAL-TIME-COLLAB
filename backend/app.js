@@ -13,7 +13,7 @@ require("dotenv").config();
 const io = new Server(server, {
   cors: {
     origin: process.env.FRONTEND_URL, // Allow your frontend's origin
-    methods: ["GET", "POST"], // Allowable methods
+    methods: ["GET", "POST", "PUT", "DELETE"], // Allowable methods
     credentials: true, // Allow credentials (cookies, etc.)
   },
 });
