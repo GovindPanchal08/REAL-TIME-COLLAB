@@ -21,16 +21,16 @@ const Setting = () => {
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
   };
-  const openInvsCode = async () => {
-    const { fileName, code } = codedata;
-    console.log(fileName);
-    const res = await SendData("/save-open-vscode", {
-      fileName,
-      code,
-    });
-    if (res.message) toast.success("File saved and opened in VS Code");
-    // console.log(res.message);
-  };
+  // const openInvsCode = async () => {
+  //   const { fileName, code } = codedata;
+  //   console.log(fileName);
+  //   const res = await SendData("/save-open-vscode", {
+  //     fileName,
+  //     code,
+  //   });
+  //   if (res.message) toast.success("File saved and opened in VS Code");
+  //   // console.log(res.message);
+  // };
   return (
     <>
       <Suspense fallback={<div></div>}>
@@ -63,12 +63,12 @@ const Setting = () => {
               >
                 Download Code
               </button>
-              <button
+              {/* <button
                 onClick={openInvsCode}
                 className="px-3 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors duration-300"
               >
                 Open With vsCode
-              </button>
+              </button> */}
             </div>
           </div>
         </Box>

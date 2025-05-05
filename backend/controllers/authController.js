@@ -57,7 +57,9 @@ module.exports.loginUser = async function (req, res) {
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
-    res.status(200).json({ message: "Login successful", data: { user: user._id } });
+    res
+      .status(200)
+      .json({ message: "Login successful", data: { user: user._id } });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Server error" });
@@ -65,18 +67,17 @@ module.exports.loginUser = async function (req, res) {
 };
 
 module.exports.profile = async function (req, res) {
-  console.log(req.user);
   try {
-    let { username, email } = req.body;
+    let { username, email, userId } = req.body;
     let pic = req.file ? req.file.buffer : undefined;
-    console.log(req.file);
-    // Ensure the user is authenticated
-    if (!req.user || !req.user.id) {
-      return res.status(401).json({ message: "User not authenticated." });
-    }
+    console.log("File is:", pic);
+    // // Ensure the user is authenticated
+    // if (!req.user || !req.user.id) {
+    //   return res.status(401).json({ message: "User not authenticated." });
+    // }
 
-    let id = req.user.id; // User ID from the authentication middleware
-    console.log("User ID is:", id);
+    // User ID from the authentication middleware
+    console.log("User ID is:", userId);
 
     // Build the updated data object
     let updatedData = {};
@@ -85,12 +86,12 @@ module.exports.profile = async function (req, res) {
     if (pic) updatedData.pic = pic;
 
     // Update user in the database
-    let user = await userModel.findOneAndUpdate({ _id: id }, updatedData, {
+    let user = await userModel.findOneAndUpdate({ _id: userId }, updatedData, {
       new: true,
     });
     // If user is not found
     if (!user) {
-      return res.status(404).json({ message: "User not found." });
+      return res.status(404).json({ error: "User not found." });
     }
     // Respond with success and updated user
     return res

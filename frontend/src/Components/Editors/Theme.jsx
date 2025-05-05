@@ -6,11 +6,6 @@ const themes = [
   { id: "vs-dark", name: "Dark Theme" },
   { id: "vs", name: "Light Theme" },
   { id: "hc-black", name: "High Contrast" },
-  { id: "monokai", name: "Monokai" },
-  { id: "dracula", name: "Dracula" },
-  { id: "solarized-dark", name: "Solarized Dark" },
-  { id: "solarized-light", name: "Solarized Light" },
-  { id: "night-owl", name: "Night Owl" },
 ];
 
 const Theme = () => {

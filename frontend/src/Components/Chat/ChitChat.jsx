@@ -19,16 +19,18 @@ const ChitChat = () => {
     [socket, message, userId, roomId]
   );
   // Scroll chat to bottom if the user is near the bottom
-  const scrollToBottom = useCallback(() => {
+  const scrollToBottom = useCallback((force = false) => {
     if (chatContainerRef.current) {
       const { scrollHeight, clientHeight, scrollTop } =
         chatContainerRef.current;
-      const isNearBottom = scrollHeight - scrollTop - clientHeight < 100; // 100px threshold
-      if (isNearBottom) {
+      const isNearBottom = scrollHeight - scrollTop - clientHeight < 100;
+
+      if (isNearBottom || force) {
         chatContainerRef.current.scrollTop = scrollHeight;
       }
     }
   }, []);
+
   useEffect(() => {
     if (!socket) return;
 
@@ -49,10 +51,11 @@ const ChitChat = () => {
       socket.off("chat-history", handleChatHistory);
       socket.off("received-msg", handleReceivedMsg);
     };
-  }, [socket]);
+  }, [socket, userId, roomId, receiveMessages]);
+
   useEffect(() => {
-    scrollToBottom();
-  }, [receiveMessages, scrollToBottom]);
+    scrollToBottom(true);
+  }, [scrollToBottom,receiveMessages]);
   return (
     <div className="">
       <div className="mt-2">

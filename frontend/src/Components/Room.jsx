@@ -87,8 +87,8 @@ const RoomEntry = ({ token }) => {
       </p>
       <div className="min-h-screen bg-gradient-to-b from-gray-100 to-gray-200 text-gray-900 flex flex-col items-center p-6">
         <nav className="w-full flex justify-between items-center px-4 md:px-16 py-2  rounded-lg">
-          <div>
-            <h1 className="text-[2rem] shadow-md shadow-blue-200 rounded-md md:text-[2.5rem] font-medium tracking-tighter">
+          <div className="">
+            <h1 className="text-[2rem] shadow-sm shadow-blue-100 rounded-md md:text-[2.5rem] font-medium tracking-tighter">
               Code<span className="text-blue-500">ify</span>
             </h1>
           </div>

@@ -39,11 +39,12 @@ const Output = ({ editorRef, language }) => {
       background={"#1e1e1e"}
       position={"relative"}
     >
-      <Box display="flex"  alignItems={"center"} gap={"10px"} mx={2}>
-        <Text textColor="white" fontSize={"lg"}>
+      <Box className="flex flex-col">
+        <Text className="ml-2" textColor="white" fontSize={"lg"}>
           output
         </Text>
         <Button
+        className="w-fit"
           isLoading={isloading}
           variant="outline"
           colorScheme="green"

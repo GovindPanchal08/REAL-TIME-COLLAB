@@ -25,15 +25,13 @@ const Login = ({ onSuccess }) => {
         password,
       });
       // console.log(res);
-      if (res.message === "Successfully Login" && res.data.token) {
+      if (res.message === "Login successful") {
         toast.success(res.message);
         window.localStorage.setItem("userId", res.data.user);
         localStorage.setItem("token", res.data.token);
         onSuccess(res.data.token);
         navigate("/");
-      } else if (res.error === "email or password incorrect") {
-        toast.warning("try agian");
-      } else if (res.error === "password did not match") {
+      } else if (res.error === "Invalid credentials") {
         toast.warning("invalid credentials");
       } else {
         toast.error(res.message);

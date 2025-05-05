@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 const router = express.Router();
 const upload = require("../config/ṃulter-config");
 const {
-  ragisterUser,
+  registerUser,
   loginUser,
   logout,
   profile,
@@ -15,11 +15,11 @@ router.get("/", function (req, res) {
   res.send("hey its users ");
 });
 
-router.post("/ragister", ragisterUser);
+router.post("/ragister", registerUser);
 router.post("/login", loginUser);
 router.get("/logout", logout);
 
-router.post("/profile", upload.single("photo"), isLoggedin, profile);
+router.post("/profile", upload.single("photo"), profile);
 
 router.get("/validate", isLoggedin, async (req, res) => {
   const authHeader = req.headers["authorization"];

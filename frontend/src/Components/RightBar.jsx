@@ -24,7 +24,7 @@ const RightBar = () => {
 
         {/* Video Call Panel */}
         <div
-          className={`absolute w-full  md:w-[40vw] h-full top-0 right-0  bg-[#1e1e2f] transform transition-transform duration-500 ease-in-out ${
+          className={`absolute w-full  md:w-[45vw] h-fit top-0 right-0  bg-[#1e1e2f] transform transition-transform duration-500 ease-in-out ${
             isOpen ? "translate-x-0" : "translate-x-full"
           }`}
         >
@@ -40,10 +40,8 @@ const RightBar = () => {
             </button>
           </div>
 
-          <div className="w-full h-screen">
-            <div className="w-full  h-[90vh] rounded-2xl overflow-hidden shadow-xl ">
-              <VideoCall containerRef={videoContainerRef} />
-            </div>
+          <div className="w-full  h-[90vh] overflow-auto  ">
+            <VideoCall containerRef={videoContainerRef} />
           </div>
         </div>
       </Suspense>

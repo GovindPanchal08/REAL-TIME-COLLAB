@@ -19,7 +19,7 @@ const VideoCall = () => {
 
     if (isInCall && containerRef.current) {
       const kitToken = ZegoUIKitPrebuilt.generateKitTokenForTest(
-        JSON.parse(appID),
+        Number(appID),
         serverSecret,
         roomId,
         userID,
@@ -33,6 +33,8 @@ const VideoCall = () => {
         },
         layout: "Grid",
         showLayoutButton: false,
+        showSettingButton: false,
+        showAudioButton: false,
         showPreJoinView: false,
         showRoomTimer: false,
         showScreenSharingButton: false,
@@ -41,9 +43,22 @@ const VideoCall = () => {
         showMoreButton: false,
         showTextChat: false,
         showLeaveRoomConfirmDialog: false,
+        videoScreenConfig: {
+          objectFit:  "contain"// 视频画面显示模式，默认 "contain"
+        }
       });
       // Apply styling after short delay
       setTimeout(() => {
+        const moreBtn = containerRef.current.querySelector('[class*="more"]');
+        if (moreBtn) {
+          moreBtn.style.display = "none";
+        }
+
+        const settingsBtn =
+          containerRef.current.querySelector('[class*="setting"]');
+        if (settingsBtn) {
+          settingsBtn.style.display = "none";
+        }
         const videoWrappers = containerRef.current.querySelectorAll(
           ".zego-video-layer, .zego-user-video"
         );
@@ -68,16 +83,16 @@ const VideoCall = () => {
     };
   }, [isInCall, userName]);
   return (
-    <div className="w-full flex justify-center items-center p-2">
+    <div className="flex items-center justify-center">
       {!isInCall ? (
         <button
           onClick={startCall}
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+          className="px-4 py-2 text-center bg-blue-600 text-white rounded-lg hover:bg-blue-700"
         >
           Join
         </button>
       ) : (
-        <div className=" rounded-xl shadow-lg" ref={containerRef}></div>
+        <div className="" ref={containerRef}></div>
       )}
     </div>
   );

@@ -2,13 +2,14 @@ import React, { useState } from "react";
 import { SendData } from "../Const/api.js";
 import { useNavigate } from "react-router-dom";
 import { userData } from "../Context/context.jsx";
-import { deleteCookie, getCookie } from "../Const/contant.js";
+import { deleteCookie } from "../Const/contant.js";
 import { toast } from "react-toastify";
 
 const UserManage = () => {
   const navigate = useNavigate();
   const roomid = localStorage.getItem("roomId");
-  
+  const userId = window.localStorage.getItem("userId");
+  console.log(userId);
   const { userName, email, pic } = userData();
   const [user, setUser] = useState({
     email: email,
@@ -54,6 +55,7 @@ const UserManage = () => {
       const formData = new FormData();
       formData.append("username", user.username);
       formData.append("email", user.email);
+      formData.append("userId", userId);
       if (selectedFile) {
         formData.append("photo", selectedFile);
         console.log(selectedFile);
@@ -63,7 +65,7 @@ const UserManage = () => {
       if (res.message === "Profile updated successfully.") {
         toast.success("Profile updated successfully.");
       } else {
-        toast.error("Profile update failed.");
+        toast.error(res.error);
       }
       console.log(res);
     } catch (error) {
@@ -106,8 +108,8 @@ const UserManage = () => {
           <div className="relative">
             <img
               src={
-                user.profilePhoto
-                  ? `data:image/jpeg;base64,${user.profilePhoto}`
+                user.profilePhoto?.startsWith("data:image")
+                  ? user.profilePhoto
                   : "/src/assets/public/images/profile.png"
               }
               alt="Profile"

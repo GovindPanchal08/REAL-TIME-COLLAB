@@ -33,15 +33,12 @@ const Register = () => {
           username,
           email,
           password,
-        },
-        {
-          withCredentials: true,
         }
       );
-      if (res.error === "already have an account") {
+      if (res.error === "Account already exists") {
         toast.info(res.error);
         navigate("/login");
-      } else if (res.message === "user created successfully") {
+      } else if (res.message === "User created successfully") {
         toast.success(res.message);
         navigate("/login");
       } else {

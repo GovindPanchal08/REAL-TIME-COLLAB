@@ -16,14 +16,14 @@ export function App() {
   const [token, setToken] = useState(getCookie("token") || null);
 
   useEffect(() => {
-    const storedToken = getCookie("token");
+    const storedToken = localStorage.getItem("token");
     // console.log(storedToken)
     if (storedToken) {
       setToken(storedToken);
     }
   }, []);
   const handleLoginSuccess = (tok) => {
-    // localStorage.setItem("token", tok); // Store token
+    localStorage.setItem("token", tok); // Store token
     setToken(tok);
   };
   // console.log(token);
