@@ -70,6 +70,8 @@ Client (React) <---> WebSocket (Socket.IO) <---> Server (Node.js + Express) <---
 
 ---
 
+---
+
 ## 🚀 Installation
 
 ```bash
@@ -87,7 +89,7 @@ cd frontend
 npm install
 npm run dev
 
---
+---
 ##💡 Usage
 Register/Login using your email.
 
@@ -99,11 +101,11 @@ Enable video chat for team discussions.
 
 Share code, download files, or ask AI for help!
 
---
+---
 ##👥 Team Contributions
 Our success was truly collaborative. No role had higher priority—we all contributed equally to create a robust final product.
 
---
+---
 ##🧭 Future Scope
 🧠 AI Assistant for debugging and autocompletion
 
@@ -117,5 +119,5 @@ Our success was truly collaborative. No role had higher priority—we all contri
 
 📊 Analytics Dashboard with Chart.js
 
---
+---
 
