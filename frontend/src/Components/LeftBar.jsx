@@ -44,12 +44,12 @@ const LeftBar = () => {
       tooltip: "Chat",
       component: <ChitChat />,
     },
-    {
-      id: "chatbot",
-      icon: chatbotIcon,
-      tooltip: "Chatbot",
-      component: <Chatbot />,
-    },
+    // {
+    //   id: "chatbot",
+    //   icon: chatbotIcon,
+    //   tooltip: "Chatbot",
+    //   component: <Chatbot />,
+    // },
     {
       id: "settings",
       icon: settingsIcon,
@@ -128,7 +128,7 @@ const LeftBar = () => {
                 </span>
               </div>
             </div>
-            <div
+            {/* <div
               className={`flex items-center justify-center md:p-3 p-2 rounded-md cursor-pointer hover:bg-[#3a3f58] transition-all duration-300 `}
               onClick={() => handleGenerateCode(!generateCode)}
             >
@@ -143,7 +143,7 @@ const LeftBar = () => {
                   Generate Code
                 </span>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
         {/* Right Side Panels */}

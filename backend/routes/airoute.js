@@ -4,7 +4,7 @@ const axios = require("axios");
 require("dotenv").config();
 
 const GEMINI_API_URL =
-  "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent";
+  "https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash:generateContent";
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY; // Ensure this is set in your .env file
 
 // 🔹 General AI Assistant Route

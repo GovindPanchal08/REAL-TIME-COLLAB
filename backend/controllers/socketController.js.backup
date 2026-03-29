@@ -18,10 +18,6 @@ const handleSocket = (io) => {
       const user = await userModel.findById(userId).lean();
       if (!user) return socket.disconnect();
 
-      socket.user = user;
-      socket.userId = userId;
-      socket.username = user.username || user.fullname;
-
       const picBase64 =
         user.pic instanceof Buffer ? user.pic.toString("base64") : user.pic;
       socket.emit("userData", { user, picBase64 });
@@ -44,15 +40,15 @@ const handleSocket = (io) => {
       );
       // Handle code change
       socket.on("code-change", (code) => {
-        socket.to(socket.roomid).emit("receive-code", code);
+        socket.to(roomid).emit("receive-code", code); // Send code to all users in the room
       });
       // Handle cursor position change
       socket.on("cursor-move", (cursorData) => {
-        socket.to(cursorData.roomId || socket.roomid).emit("update-cursor", {
+        socket.to(cursorData.roomId).emit("update-cursor", {
           id: socket.id,
           x: cursorData.x,
           y: cursorData.y,
-          username: socket.username,
+          username: user.fullname || user.username,
         });
       });
 
@@ -90,29 +86,8 @@ const handleSocket = (io) => {
         socket.emit("room-data", room[0]);
         socket.emit("chat-history", room[0].messages);
       }
-
-      socket.on("send", async ({ message, roomId }) => {
-        if (!socket.user) return;
-        const targetRoomId = roomId || socket.roomid;
-
-        const newMsg = {
-          sender: socket.userId,
-          content: message,
-          senderName: socket.username,
-          timestamp: new Date(),
-        };
-        await roomModel.updateOne({ roomId: targetRoomId }, { $push: { messages: newMsg } });
-        io.to(targetRoomId).emit("received-msg", {
-          roomId: targetRoomId,
-          userId: socket.userId,
-          content: message,
-          sender: { fullname: socket.username },
-          timestamp: new Date(),
-        });
-      });
       // Handle leave room
-      socket.on("leave-room", ({ roomid }) => {
-        const userId = socket.userId;
+      socket.on("leave-room", ({ roomid, userId }) => {
         console.log("room leave", roomid, "with", userId);
 
         if (onlineUsers[roomid]) {
@@ -129,8 +104,7 @@ const handleSocket = (io) => {
       // Handle disconnection
       socket.on("disconnect", () => {
         console.log(`User disconnected: ${socket.id}`);
-        const roomId = socket.roomid;
-        const userId = socket.userId;
+        const roomId = socket.roomid; // Retrieve room ID from socket
         if (roomId && onlineUsers[roomId]) {
           // Remove user from online users list for the room
           onlineUsers[roomId] = onlineUsers[roomId].filter(
@@ -162,6 +136,44 @@ const handleSocket = (io) => {
             }
           }
         }
+      });
+    });
+
+    // Code/cursor/typing events (no change needed)
+    socket.on("code-change", (code) =>
+      socket.to(roomid).emit("receive-code", code),
+    );
+    socket.on("cursor-move", (cursorData) =>
+      socket.to(cursorData.roomId).emit("update-cursor", {
+        id: socket.id,
+        x: cursorData.x,
+        y: cursorData.y,
+        username: user?.username,
+      }),
+    );
+    socket.on("typing", ({ roomid, lineNumber, userName }) =>
+      socket
+        .to(roomid)
+        .emit("typing", { userId: socket.id, lineNumber, userName }),
+    );
+    socket.on("stop-typing", ({ roomid }) =>
+      socket.to(roomid).emit("stop-typing", { userId: socket.id }),
+    );
+
+    socket.on("send", async ({ message, userId, roomId }) => {
+      const newMsg = {
+        sender: userId,
+        content: message,
+        senderName: user.username,
+        timestamp: new Date(),
+      };
+      await roomModel.updateOne({ roomId }, { $push: { messages: newMsg } });
+      io.to(roomId).emit("received-msg", {
+        roomId,
+        userId,
+        content: message,
+        sender: { fullname: user.username },
+        timestamp: new Date(),
       });
     });
   });

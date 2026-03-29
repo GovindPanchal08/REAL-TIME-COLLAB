@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, useCallback } from "react";
 import PropTypes from "prop-types";
 import { useSocket } from "../../Context/context.jsx";
 import { getUserColor } from "../../Const/contant.js";
@@ -12,7 +12,8 @@ const ResizableSplit = ({ leftContent, rightContent, showCursors }) => {
   const leftRef = useRef(null);
   const rightRef = useRef(null);
   const resizerRef = useRef(null);
-  const [isResizing, setIsResizing] = useState(false);
+const [isResizing, setIsResizing] = useState(false);
+  const [leftWidth, setLeftWidth] = useState(70); // Initial %
   const MIN_WIDTH = 150; // Minimum width for both sections
 
   const cursorTimeoutsRef = useRef({});
@@ -76,31 +77,49 @@ const ResizableSplit = ({ leftContent, rightContent, showCursors }) => {
       socket.emit("cursor-move", cursorData);
     }
   };
-  // resizer
-  const handleMouseDown = (e) => {
+  // resizer - fixed
+  const handleMouseDown = useCallback((e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    document.body.style.userSelect = 'none';
+    document.body.style.cursor = 'col-resize';
     setIsResizing(true);
-  };
-  const handleMouseMove = (e) => {
-    if (!isResizing) return;
+  }, []);
 
-    const containerWidth = containerRef.current.offsetWidth;
-    let leftWidth = e.clientX - containerRef.current.offsetLeft;
+  const handleMouseMove = useCallback((e) => {
+    if (!isResizing || !containerRef.current) return;
+    requestAnimationFrame(() => {
+      const containerWidth = containerRef.current.offsetWidth;
+      const rect = containerRef.current.getBoundingClientRect();
+      let newLeftWidth = e.clientX - rect.left;
 
-    if (leftWidth < MIN_WIDTH) leftWidth = MIN_WIDTH;
-    if (leftWidth > containerWidth - MIN_WIDTH)
-      leftWidth = containerWidth - MIN_WIDTH;
+      if (newLeftWidth < MIN_WIDTH) newLeftWidth = MIN_WIDTH;
+      if (newLeftWidth > containerWidth - MIN_WIDTH) newLeftWidth = containerWidth - MIN_WIDTH;
 
-    const rightWidth = containerWidth - leftWidth;
+      const newRightWidth = containerWidth - newLeftWidth;
 
-    if (leftRef.current && rightRef.current && resizerRef.current) {
-      leftRef.current.style.width = `${leftWidth}px`;
-      rightRef.current.style.width = `${rightWidth}px`;
-      resizerRef.current.style.left = `${leftWidth}px`;
+      if (leftRef.current) {
+        leftRef.current.style.flex = `1 0 ${newLeftWidth}px`;
+        leftRef.current.style.width = `${newLeftWidth}px`;
+      }
+      if (rightRef.current) {
+        rightRef.current.style.flex = `1 0 ${newRightWidth}px`;
+        rightRef.current.style.width = `${newRightWidth}px`;
+      }
+      if (resizerRef.current) {
+        resizerRef.current.style.left = `${newLeftWidth}px`;
+      }
+      setLeftWidth((newLeftWidth / containerWidth) * 100);
+    });
+  }, [isResizing]);
+
+  const handleMouseUp = useCallback(() => {
+    if (isResizing) {
+      document.body.style.userSelect = '';
+      document.body.style.cursor = '';
+      setIsResizing(false);
     }
-  };
-  const handleMouseUp = () => {
-    setIsResizing(false);
-  };
+  }, [isResizing]);
   useEffect(() => {
     if (isResizing) {
       document.addEventListener("mousemove", handleMouseMove);
@@ -110,7 +129,7 @@ const ResizableSplit = ({ leftContent, rightContent, showCursors }) => {
       document.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseup", handleMouseUp);
     };
-  }, [isResizing, handleMouseMove, handleMouseUp, leftRef, rightRef]);
+  }, [isResizing, handleMouseMove, handleMouseUp]);
 
   //cursorMovement
   useEffect(() => {
@@ -136,8 +155,8 @@ const ResizableSplit = ({ leftContent, rightContent, showCursors }) => {
       <div className="md:absolute md:flex space-y-1 md:space-y-0   gap-3 h-full w-full">
         <div
           ref={leftRef}
-          className={`left mt-1 md:mt-0 h-[60%] md:h-full md:w-[70%] `}
-          // style={{ width: "70%" }}
+          className={`left mt-1 md:mt-0 h-[60%] md:h-full flex-1 min-w-[150px] transition-all duration-100 ${isResizing ? 'pointer-events-none' : ''}`}
+          style={{ flexBasis: `${leftWidth}%` }}
         >
           {leftContent}
         </div>
@@ -145,22 +164,25 @@ const ResizableSplit = ({ leftContent, rightContent, showCursors }) => {
         <div
           ref={resizerRef}
           onMouseDown={handleMouseDown}
-          className="resizer hidden md:block bg-[#ccc]  hover:bg-blue-500  hover:transition-all hover:ease-in-out hover:duration-300 rounded-sm"
+          className="resizer hidden md:block bg-[#ccc] hover:bg-blue-500 hover:transition-all hover:ease-in-out hover:duration-300 rounded-sm z-10"
           style={{
             width: "5px",
+            height: '100%',
             cursor: "col-resize",
             position: "absolute",
             top: 0,
-            right: "50%",
-            overflowY: "hidden",
-            bottom: 0,
-            left: "70%", // Initially center it
-            transform: "translateX(-50%)",
+            left: `calc(${leftWidth}% - 2.5px)`,
+            transform: "translateX(0)",
+            zIndex: 20,
           }}
         ></div>
 
         {/* Right Content */}
-        <div ref={rightRef} className="h-[50%] md:h-full md:w-[30%] " >
+        <div 
+          ref={rightRef} 
+          className={`h-[50%] md:h-full flex-1 min-w-[150px] transition-all duration-100 ${isResizing ? 'pointer-events-none' : ''}`}
+          style={{ flexBasis: `${100 - leftWidth}%` }}
+        >
           {rightContent}
         </div>
       </div>

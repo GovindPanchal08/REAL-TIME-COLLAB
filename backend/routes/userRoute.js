@@ -19,7 +19,7 @@ router.post("/ragister", registerUser);
 router.post("/login", loginUser);
 router.get("/logout", logout);
 
-router.post("/profile", upload.single("photo"), profile);
+router.post("/profile", upload.single("photo"), isLoggedin, profile);
 
 router.get("/validate", isLoggedin, async (req, res) => {
   const authHeader = req.headers["authorization"];

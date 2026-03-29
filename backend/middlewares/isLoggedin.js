@@ -25,20 +25,8 @@ module.exports.isLoggedin = async function (req, res, next) {
     req.user = user;
     next();
   } catch (error) {
-    console.error("Authentication error:", error.message);
-
-    // Handle specific JWT errors
-    if (error.name === "TokenExpiredError") {
-      return res
-        .status(401)
-        .json({ message: "Session expired. Please log in again." });
-    } else if (error.name === "JsonWebTokenError") {
-      return res
-        .status(401)
-        .json({ message: "Invalid token. Please log in again." });
-    }
-
-    // Generic error response
-    return res.status(500).json({ message: "Authentication failed." });
+    // Let global error handler handle JWT/Mongoose errors
+    next(error);
   }
 };
+

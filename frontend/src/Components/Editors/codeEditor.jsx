@@ -194,7 +194,7 @@ const CodeEditor = () => {
 
       editor.focus();
     },
-    [socket, socketId]
+    [socket, socketId, roomid, userName] 
   );
 
   //generating code with promptInput

@@ -10,8 +10,8 @@ const RoomEntry = ({ token }) => {
   const [roomid, setRoomId] = useState("");
   const [rooms, setRooms] = useState([]);
 
-  const handleJoinRoom = async (roomid) => {
-    if (roomid.trim()) {
+  const handleJoinRoom = async(roomid) => {
+    if (roomid?.trim()) {
       try {
         const res = await SendData("/room/add-room", {
           userId,

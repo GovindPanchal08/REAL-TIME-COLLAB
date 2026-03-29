@@ -2,24 +2,22 @@ const userModel = require("../models/user-model");
 const bcrypt = require("bcrypt");
 const generateToken = require("../utils/generateToken");
 
-module.exports.registerUser = async function (req, res) {
+module.exports.registerUser = async function (req, res, next) {
   try {
     const { email, password, username } = req.body;
 
-    const existingUser = await userModel.findOne({ email });
+    const existingUser = await userModel.findOne({ email: email });
     if (existingUser) {
-      return res.status(400).json({ error: "Account already exists" });
+      console.log("got here");
+      return res.status(400).json({ message: "Account already exists" });
     }
-
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
-
     const user = await userModel.create({
       email,
       password: hashedPassword,
       username,
     });
-
     const token = generateToken(user);
     res.cookie("token", token, {
       httpOnly: true,
@@ -27,26 +25,26 @@ module.exports.registerUser = async function (req, res) {
       sameSite: "None",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
-
-    res.status(201).json({ message: "User created successfully" });
+    res
+      .status(201)
+      .json({ message: "User created successfully", userId: user._id });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Server error" });
+    next(err);
   }
 };
 
-module.exports.loginUser = async function (req, res) {
+module.exports.loginUser = async function (req, res, next) {
   try {
     const { email, password } = req.body;
 
     const user = await userModel.findOne({ email });
     if (!user) {
-      return res.status(401).json({ error: "Invalid credentials" });
+      return res.status(401).json({ message: "Invalid credentials" });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res.status(401).json({ error: "Invalid credentials" });
+      return res.status(401).json({ message: "Invalid credentials" });
     }
 
     const token = generateToken(user);
@@ -57,51 +55,37 @@ module.exports.loginUser = async function (req, res) {
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
-    res
-      .status(200)
-      .json({ message: "Login successful", data: { user: user._id } });
+    res.status(200).json({ message: "Login successful", userId: user._id });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Server error" });
+    next(err);
   }
 };
 
 module.exports.profile = async function (req, res) {
   try {
-    let { username, email, userId } = req.body;
-    let pic = req.file ? req.file.buffer : undefined;
-    console.log("File is:", pic);
-    // // Ensure the user is authenticated
-    // if (!req.user || !req.user.id) {
-    //   return res.status(401).json({ message: "User not authenticated." });
-    // }
+    const { username, email, userId } = req.body;
+    const pic = req.file ? req.file.buffer : undefined;
 
-    // User ID from the authentication middleware
-    console.log("User ID is:", userId);
-
-    // Build the updated data object
-    let updatedData = {};
+    const updatedData = {};
     if (username) updatedData.username = username;
-    if (email) updatedData.email = email || req.user.email;
+    if (email) updatedData.email = email;
     if (pic) updatedData.pic = pic;
 
-    // Update user in the database
-    let user = await userModel.findOneAndUpdate({ _id: userId }, updatedData, {
-      new: true,
-    });
-    // If user is not found
+    const user = await userModel
+      .findByIdAndUpdate(userId, updatedData, {
+        new: true,
+        runValidators: true,
+      })
+      .select("-password");
+
     if (!user) {
-      return res.status(404).json({ error: "User not found." });
+      return res.status(404).json({ message: "User not found" });
     }
-    // Respond with success and updated user
-    return res
-      .status(200)
-      .json({ message: "Profile updated successfully.", user });
+
+    res.status(200).json({ message: "Profile updated successfully.", user });
   } catch (error) {
-    console.error(error.message); // Log the error
-    return res
-      .status(500)
-      .json({ message: "An error occurred.", error: error.message });
+    // Let global error handler catch
+    next(error);
   }
 };
 module.exports.logout = function (req, res) {

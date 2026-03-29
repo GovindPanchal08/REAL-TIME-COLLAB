@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, lazy, Suspense } from "react";
+import  { useState, useRef, useEffect, lazy, Suspense } from "react";
 import { Editor } from "@monaco-editor/react";
 import { useParams } from "react-router-dom";
 import { useSettings } from "../../Context/SettingsContext";
@@ -51,7 +51,7 @@ const Webeditor = () => {
   const { showCursors } = useSettings();
   const [fileName, setFileName] = useState("index.html");
   const { roomid } = useParams();
-  console.log(roomid);
+  // console.log(roomid);
   const [fileContent, setFileContent] = useState(files[fileName].value);
   const [iframeContent, setIframeContent] = useState("");
   const previewTabRef = useRef(null);

@@ -1,5 +1,6 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import  { useState, useEffect, useRef, useCallback } from "react";
 import { useSocket } from "../../Context/context";
+import { toast } from "react-toastify";
 
 const ChitChat = () => {
   const { socket } = useSocket();
@@ -7,17 +8,16 @@ const ChitChat = () => {
   const roomId = localStorage.getItem("roomId");
   const [message, setMessage] = useState("");
   const [receiveMessages, setReceiveMessages] = useState([]);
+  const [typingUsers, setTypingUsers] = useState(new Set());
   const chatContainerRef = useRef(null);
-  // Send message handler
-  const handleSendMessage = useCallback(
-    (event) => {
-      if (event.key === "Enter" && socket && message.trim()) {
-        socket.emit("send", { message, userId, roomId });
-        setMessage(""); // Clear input immediately for better UX
-      }
-    },
-    [socket, message, userId, roomId]
-  );
+
+  // Send message
+  const handleSendMessage = useCallback((event) => {
+    if (event.key === "Enter" && socket && message.trim()) {
+      socket.emit("send", { message, userId, roomId });
+      setMessage("");
+    }
+  }, [socket, message, userId, roomId]);
   // Scroll chat to bottom if the user is near the bottom
   const scrollToBottom = useCallback((force = false) => {
     if (chatContainerRef.current) {
