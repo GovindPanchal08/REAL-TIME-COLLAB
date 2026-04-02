@@ -2,6 +2,7 @@
 import { executeCode } from "../../Const/api.js";
 import { Box, Text, Button, useToast } from "@chakra-ui/react";
 import React, { useState } from "react";
+import { LANGUAGE_VERSIONS } from "../../Const/contant.js";
 
 const Output = ({ editorRef, language }) => {
   const toast = useToast();
@@ -15,14 +16,24 @@ const Output = ({ editorRef, language }) => {
 
     try {
       setisloading(true);
-      const { run: result } = await executeCode(language, sourcecode);
-      setoutput(result.output.split("\n"));
-      result.stderr ? seterr(true) : seterr(false);
-      // console.log(result.output);
+
+      const result = await executeCode(language, sourcecode);
+
+      const outputText =
+        result.stdout || result.output || result.stderr || "No output";
+
+      setoutput(outputText.split("\n"));
+
+      // error handling
+      if (result.stderr && result.stderr.trim() !== "") {
+        seterr(true);
+      } else {
+        seterr(false);
+      }
     } catch (error) {
       toast({
-        title: "An Error",
-        description: error.message || "unable to run code",
+        title: "Error running code",
+        description: error.message || "Unable to execute code",
         status: "error",
       });
     } finally {
@@ -44,7 +55,7 @@ const Output = ({ editorRef, language }) => {
           output
         </Text>
         <Button
-        className="w-fit"
+          className="w-fit"
           isLoading={isloading}
           variant="outline"
           colorScheme="green"

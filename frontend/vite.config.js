@@ -48,4 +48,5 @@ export default defineConfig({
   optimizeDeps: {
     include: ["react", "react-dom"], // Optimize react libraries
   },
+  
 });

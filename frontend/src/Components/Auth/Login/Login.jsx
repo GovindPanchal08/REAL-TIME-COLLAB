@@ -1,4 +1,4 @@
-import  { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { SendData } from "../../../Const/api.js";
@@ -24,12 +24,14 @@ const Login = ({ onSuccess }) => {
         email,
         password,
       });
+      console.log(res);
+
       // console.log(res);
-      if (res.message === "Login successful") {
+      if (res.message == "Login successful") {
         toast.success(res.message);
-        window.localStorage.setItem("userId", res.data.user);
-        localStorage.setItem("token", res.data.token);
-        onSuccess(res.data.token);
+        localStorage.setItem("userId", res.userId);
+        localStorage.setItem("token", res.token);
+        onSuccess(res.token);
         navigate("/");
       } else if (res.error === "Invalid credentials") {
         toast.warning("invalid credentials");
