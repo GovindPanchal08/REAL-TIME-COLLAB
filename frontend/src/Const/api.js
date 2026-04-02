@@ -122,7 +122,7 @@ const API = axios.create({
   baseURL: "https://onecompiler-apis.p.rapidapi.com/api/v1",
   headers: {
     "Content-Type": "application/json",
-    "X-RapidAPI-Key": "ff9e198c5cmshe7020d20ff1bc5fp10bd86jsnaf5e80800ade",
+    "X-RapidAPI-Key": import.meta.env.VITE_RAPIDAPI_KEY,
     "X-RapidAPI-Host": "onecompiler-apis.p.rapidapi.com",
   },
 });
